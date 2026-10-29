@@ -1,0 +1,66 @@
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+*.py[cod]
+.coverage
+htmlcov/
+
+# Local environment variables and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.env
+credentials.*
+*_credentials.*
+secrets.*
+*_secret.*
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.aws/
+.ssh/
+
+# Local databases, datasets, and generated outputs
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+data/
+datasets/
+outputs/
+runs/
+logs/
+*.log
+*.tmp
+*.temp
+*.bak
+
+# Downloaded model weights and generated model artifacts
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.engine
+*.h5
+*.keras
+*.safetensors
+*.pb
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
