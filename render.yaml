@@ -3,7 +3,21 @@ services:
     name: adpds-backend
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
       - key: ADPDS_CORS_ORIGINS
         value: "*"
+      - key: ADPDS_MAX_UPLOAD_BYTES
+        value: "6291456"
+      - key: ADPDS_MAX_IMAGE_SIDE
+        value: "960"
+      - key: ADPDS_INFERENCE_SIZE
+        value: "512"
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: YOLO_CONFIG_DIR
+        value: "/tmp/Ultralytics"

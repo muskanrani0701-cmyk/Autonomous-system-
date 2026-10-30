@@ -64,3 +64,10 @@ python -m pytest -q
 ## Model behavior
 
 The app attempts to load `yolov8n.pt` using Ultralytics. If unavailable, it clearly reports lane-only mode and does not fabricate detections. Set `ADPDS_MODEL_PATH` to use custom weights. To claim dataset-specific performance, separately train and evaluate on real-world data with a held-out test set.
+
+
+## Render free-tier memory settings
+
+This version keeps one Uvicorn worker, delays importing/loading YOLO until the first image analysis, serializes inference, uses CPU inference at 512 pixels, limits uploads to 6 MB, resizes large images to at most 960 pixels on the long side, and returns a smaller JPEG. The `/api/status` check no longer loads PyTorch just to open the home page.
+
+If the 512 MB free instance still restarts during the first YOLO inference, set the Render environment variable `ADPDS_ENABLE_YOLO` to `0`. This keeps the website and OpenCV lane-candidate analysis online but disables YOLO object detection. Set it back to `1` to retry YOLO. Free-tier RAM may still be insufficient for PyTorch/Ultralytics; do not treat the demo as vehicle-control or safety-certified software.
