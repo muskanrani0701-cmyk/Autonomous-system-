@@ -60,9 +60,9 @@ def model_status():
         }
 
     return {
-        "available": True,
+        "available": False,
         "model": os.getenv("ADPDS_MODEL_PATH", "yolov8n.pt"),
-        "message": "YOLO enabled; model loads when analysis is requested"
+        "message": "YOLO enabled but model is not loaded yet"
     }
 
 
@@ -81,9 +81,9 @@ def detect_objects(image: np.ndarray, confidence: float = 0.35):
         results = model.predict(
             source=image,
             conf=confidence,
-            imgsz=512,
+            imgsz=416,
             device="cpu",
-            max_det=50,
+            max_det=30,
             verbose=False
         )
 
