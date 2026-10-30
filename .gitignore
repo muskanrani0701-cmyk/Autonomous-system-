@@ -49,6 +49,7 @@ logs/
 
 # Downloaded model weights and generated model artifacts
 *.pt
+!yolov8n.pt
 *.pth
 *.ckpt
 *.onnx
