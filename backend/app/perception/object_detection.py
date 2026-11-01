@@ -2,31 +2,33 @@
 import cv2
 import numpy as np
 
-_hog = None
-
-def _load_model():
-    global _hog
-    if _hog is None:
-        _hog = cv2.HOGDescriptor()
-        _hog.setSVMDetector(
-            cv2.HOGDescriptor_getDefaultPeopleDetector()
-        )
-    return _hog
-
 
 def model_status():
+    available = hasattr(cv2, "HOGDescriptor")
+
     return {
-        "available": True,
-        "model": "OpenCV HOG",
-        "message": "Lightweight pedestrian detection enabled; people only"
+        "available": available,
+        "model": "OpenCV HOG" if available else None,
+        "message": (
+            "Lightweight pedestrian detection available"
+            if available
+            else "OpenCV build does not support HOG detection"
+        )
     }
 
 
 def detect_objects(image: np.ndarray, confidence: float = 0.35):
     annotated = image.copy()
-    detector = _load_model()
+
+    if not hasattr(cv2, "HOGDescriptor"):
+        return [], annotated, model_status()
 
     try:
+        detector = cv2.HOGDescriptor()
+        detector.setSVMDetector(
+            cv2.HOGDescriptor_getDefaultPeopleDetector()
+        )
+
         boxes, weights = detector.detectMultiScale(
             image,
             winStride=(8, 8),
@@ -50,21 +52,8 @@ def detect_objects(image: np.ndarray, confidence: float = 0.35):
             })
 
             cv2.rectangle(
-                annotated,
-                (x, y),
-                (x + w, y + h),
-                (20, 220, 100),
-                2
-            )
-
-            cv2.putText(
-                annotated,
-                f"person {score:.2f}",
-                (x, max(20, y - 8)),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.55,
-                (20, 220, 100),
-                2
+                annotated, (x, y), (x + w, y + h),
+                (20, 220, 100), 2
             )
 
         return detections, annotated, model_status()
